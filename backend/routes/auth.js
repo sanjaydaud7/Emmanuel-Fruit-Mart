@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs'); // Change from 'bcrypt' to 'bcryptjs'
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
