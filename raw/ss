@@ -1,0 +1,380 @@
+document.addEventListener("DOMContentLoaded", async function () {
+  const menuList = document.getElementById("menuList");
+  const productContainer = document.getElementById("productContainer");
+  const recentlyViewedContainer = document.getElementById("recentlyViewedContainer");
+  const relatedProductsContainer = document.getElementById("relatedProductsContainer");
+  const popularProductsContainer = document.getElementById("popularProductsContainer");
+  const searchResultsContainer = document.getElementById("searchResultsContainer");
+  const searchQuerySpan = document.getElementById("searchQuery");
+  const noResults = document.getElementById("noResults");
+
+  let products = [];
+
+  // Fetch Products from Google Sheets
+  async function fetchProducts() {
+    try {
+      console.log("Fetching products from Google Sheets...");
+      const SHEET_ID = "1hqAtHke4TZe2lz6NegFshGk1zerca_OeX45LPKn2tII"; // Replace with your Google Sheet ID
+      const API_KEY = "AIzaSyBQkP7XXC9jTeB92IGyvLvUBBWWXDakUh4"; // Replace with your Google Sheets API key
+      const RANGE = "products!A1:J"; // Adjust range based on your sheet (e.g., A1:J for 10 columns)
+
+      const response = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/1hqAtHke4TZe2lz6NegFshGk1zerca_OeX45LPKn2tII/values/products!A1:J?key=AIzaSyBQkP7XXC9jTeB92IGyvLvUBBWWXDakUh4`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched data from Google Sheets:", data);
+
+      // Validate response
+      if (!data.values || !Array.isArray(data.values)) {
+        throw new Error("Invalid data format from Google Sheets");
+      }
+
+      // Assume first row is headers, skip it
+      const headers = data.values[0];
+      const rows = data.values.slice(1);
+
+      // Map rows to product objects
+      products = rows.map(row => {
+        console.log("Processing row:", row);
+        return {
+          id: parseInt(row[0]) || 0,
+          name: row[1] || "Unknown Product",
+          price: row[2] || "N/A",
+          image: row[3] || "https://via.placeholder.com/150",
+          category: row[4] || "Unknown",
+          description: row[5] || "",
+          nutrients: row[6]
+            ? row[6].split(/[;,]/).map(n => n.trim()).filter(n => n)
+            : [],
+          calories: row[7] || "N/A",
+          healthBenefits: row[8] || "",
+          tags: row[9]
+            ? row[9].split(/[;,]/).map(t => t.trim()).filter(t => t)
+            : [],
+        };
+      });
+
+      console.log("Processed products:", products);
+
+      // Verify DOM elements
+      if (!productContainer) console.error("productContainer not found in DOM");
+      if (!recentlyViewedContainer) console.error("recentlyViewedContainer not found in DOM");
+      if (!popularProductsContainer) console.error("popularProductsContainer not found in DOM");
+      if (!relatedProductsContainer) console.error("relatedProductsContainer not found in DOM");
+
+      // Load all sections
+      loadAllProducts();
+      loadRecentlyViewed();
+      loadPopularProducts();
+      loadSearchResults();
+    } catch (error) {
+      console.error('Error fetching products:', error.message);
+      products = [];
+      if (productContainer) {
+        productContainer.innerHTML = `<p>Failed to load products: ${error.message}. Please try again later.</p>`;
+      }
+    }
+  }
+
+  // Update Menu List
+  function updateMenuList() {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser && loggedInUser.email) {
+      const profilePhoto = loggedInUser.profilePhoto || "https://via.placeholder.com/40";
+      menuList.innerHTML = `
+        <li>
+          <a href="../small/edit-profile.html">
+            <img src="${profilePhoto}" alt="Profile" class="profile-icon" />
+          </a>
+        </li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+        <li><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        <li><a href="#" id="logoutBtn">Logout</a></li>
+      `;
+      document.getElementById("logoutBtn")?.addEventListener("click", function () {
+        localStorage.removeItem("loggedInUser");
+        updateMenuList();
+      });
+    } else {
+      menuList.innerHTML = `
+        <li><a href="login/login.html">Login/SignUp</a></li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+        <li><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+      `;
+    }
+  }
+
+  // Toggle Menu
+  if (menuList) {
+    menuList.style.maxHeight = "0px";
+    window.toggleMenu = function () {
+      if (menuList.style.maxHeight === "0px") {
+        menuList.style.maxHeight = "300px";
+        menuList.style.backgroundColor = "white";
+      } else {
+        menuList.style.maxHeight = "0px";
+      }
+    };
+  }
+
+  // Offer Bar
+  const offerText = document.querySelector(".offer-text");
+  if (offerText) {
+    const offers = [
+      "🔥 Limited Time Offer: Get 50% Off on All Products! 🚀",
+      "🎉 Buy 1 Get 1 Free on Selected Items! 🛍️",
+      "🚚 Free Shipping on Orders Over $99! 🌎",
+      "💥 Flash Sale: Extra 20% Off - Use Code: FLASH20 💳"
+    ];
+    let combinedOffers = offers.join("     •     ");
+    offerText.innerHTML = combinedOffers + "     •     " + combinedOffers;
+    let animationDuration = combinedOffers.length / 2;
+    offerText.style.animation = `scroll-left ${animationDuration}s linear infinite`;
+  }
+
+  // Hero Section
+  const heroSection = document.querySelector(".hero");
+  if (heroSection) {
+    const backgrounds = [
+      "url('/images/bg1.jpg')",
+      "url('/images/bg2.jpg')",
+      "url('/images/bg3.jpg')",
+      "url('/images/bg4.jpeg')",
+      "url('/images/bg5.jpeg')",
+      "url('/images/bg6.jpeg')"
+    ];
+    let index = 0;
+    function changeBackground() {
+      heroSection.style.backgroundImage = backgrounds[index];
+      index = (index + 1) % backgrounds.length;
+    }
+    setInterval(changeBackground, 2000);
+  }
+
+  // Product Functions
+  function createProductElement(product) {
+    const productDiv = document.createElement("div");
+    productDiv.classList.add("product");
+    productDiv.innerHTML = `
+      <img src="${product.image}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p class="price">${product.price}</p>
+    `;
+
+    const calorieLabel = document.createElement("div");
+    calorieLabel.textContent = `Calories: ${product.calories}`;
+    calorieLabel.classList.add("calorie-label");
+    calorieLabel.style.display = "none";
+
+    productDiv.addEventListener("mouseenter", () => calorieLabel.style.display = "block");
+    productDiv.addEventListener("mouseleave", () => calorieLabel.style.display = "none");
+    productDiv.appendChild(calorieLabel);
+
+    const viewBtn = document.createElement("button");
+    viewBtn.innerText = "View Product";
+    viewBtn.className = "view-btn";
+    viewBtn.addEventListener("click", () => viewProduct(product.id));
+    productDiv.appendChild(viewBtn);
+
+    return productDiv;
+  }
+
+  function viewProduct(productId) {
+    const selectedProduct = products.find(p => p.id === productId);
+    if (!selectedProduct) return;
+
+    localStorage.setItem("selectedProduct", JSON.stringify(selectedProduct));
+
+    let recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+    recentlyViewed = recentlyViewed.filter(p => p.id !== selectedProduct.id);
+    recentlyViewed.unshift(selectedProduct);
+    if (recentlyViewed.length > 7) recentlyViewed.pop();
+    localStorage.setItem("recentlyViewed", JSON.stringify(recentlyViewed));
+
+    let viewCounts = JSON.parse(localStorage.getItem("viewCounts")) || {};
+    viewCounts[productId] = (viewCounts[productId] || 0) + 1;
+    localStorage.setItem("viewCounts", JSON.stringify(viewCounts));
+
+    loadRecentlyViewed();
+    loadRelatedProducts(selectedProduct.category);
+    loadPopularProducts();
+    window.location.href = "product-details.html";
+  }
+
+  function loadAllProducts() {
+    if (productContainer) {
+      productContainer.innerHTML = "";
+      products.forEach(product => {
+        const productDiv = createProductElement(product);
+        productContainer.appendChild(productDiv);
+      });
+    }
+  }
+
+  function loadRecentlyViewed() {
+    if (recentlyViewedContainer) {
+      const recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+      recentlyViewedContainer.innerHTML = "";
+      recentlyViewed.forEach(product => {
+        const productDiv = createProductElement(product);
+        const removeIcon = document.createElement("span");
+        removeIcon.classList.add("remove-icon");
+        removeIcon.innerHTML = "✕";
+        removeIcon.addEventListener("click", () => removeProduct(product.id));
+        productDiv.appendChild(removeIcon);
+        recentlyViewedContainer.appendChild(productDiv);
+      });
+    }
+  }
+
+  function removeProduct(productId) {
+    let recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+    recentlyViewed = recentlyViewed.filter(p => p.id !== productId);
+    localStorage.setItem("recentlyViewed", JSON.stringify(recentlyViewed));
+    loadRecentlyViewed();
+  }
+
+  function loadPopularProducts() {
+    if (popularProductsContainer) {
+      const viewCounts = JSON.parse(localStorage.getItem("viewCounts")) || {};
+      const sortedIds = Object.entries(viewCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .map(entry => parseInt(entry[0]));
+
+      popularProductsContainer.innerHTML = "";
+      sortedIds.forEach(id => {
+        const product = products.find(p => p.id === id);
+        if (product) popularProductsContainer.appendChild(createProductElement(product));
+      });
+    }
+  }
+
+  function loadRelatedProducts(category) {
+    if (relatedProductsContainer) {
+      relatedProductsContainer.innerHTML = "";
+      const relatedProducts = products.filter(p => p.category === category).slice(0, 4);
+      relatedProducts.forEach(product => relatedProductsContainer.appendChild(createProductElement(product)));
+    }
+  }
+
+  // Utility: Simple similarity function (Levenshtein Distance)
+  function getLevenshteinDistance(a, b) {
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, // substitution
+            matrix[i][j - 1] + 1,     // insertion
+            matrix[i - 1][j] + 1      // deletion
+          );
+        }
+      }
+    }
+    return matrix[b.length][a.length];
+  }
+
+  // Utility: Check if two words are similar enough
+  function isSimilar(str1, str2) {
+    str1 = str1.toLowerCase();
+    str2 = str2.toLowerCase();
+    if (str1 === str2) return true;
+    // Allow up to 2 edits for short words, 3 for longer
+    const maxDistance = str1.length > 6 ? 3 : 2;
+    return getLevenshteinDistance(str1, str2) <= maxDistance;
+  }
+
+  // Enhanced Search Functionality
+  function loadSearchResults() {
+    if (searchResultsContainer && searchQuerySpan && noResults) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get("q")?.trim().toLowerCase() || "";
+      searchQuerySpan.textContent = query || "All Products";
+
+      if (!query) {
+        searchResultsContainer.innerHTML = "";
+        products.forEach(product => {
+          const productDiv = createProductElement(product);
+          searchResultsContainer.appendChild(productDiv);
+        });
+        noResults.style.display = "none";
+        return;
+      }
+
+      // Main filter: direct match or similar
+      const filteredProducts = products.filter(product => {
+        // Check name, category, description, nutrients, healthBenefits, tags
+        const fields = [
+          product.name,
+          product.category,
+          product.description,
+          ...(Array.isArray(product.nutrients) ? product.nutrients : (product.nutrients || "").split(";")),
+          product.healthBenefits,
+          ...(Array.isArray(product.tags) ? product.tags : (product.tags || "").split(";"))
+        ];
+        return fields.some(field => {
+          if (!field) return false;
+          // Direct match
+          if (field.toLowerCase().includes(query)) return true;
+          // Similarity check for each word in field
+          return field
+            .toLowerCase()
+            .split(/[\s,;]+/)
+            .some(word => isSimilar(word, query));
+        });
+      });
+
+      searchResultsContainer.innerHTML = "";
+      if (filteredProducts.length > 0) {
+        filteredProducts.forEach(product => {
+          const productDiv = createProductElement(product);
+          searchResultsContainer.appendChild(productDiv);
+        });
+        noResults.style.display = "none";
+      } else {
+        // Show preview: closest matches (top 3 by similarity)
+        // Compute similarity score for each product name
+        const scored = products.map(product => {
+          const name = product.name.toLowerCase();
+          const dist = getLevenshteinDistance(name, query);
+          return { product, dist };
+        });
+        scored.sort((a, b) => a.dist - b.dist);
+        const preview = scored.slice(0, 3).map(s => s.product);
+
+        noResults.style.display = "block";
+        if (preview.length > 0) {
+          const previewDiv = document.createElement("div");
+          previewDiv.innerHTML = "<div style='margin:10px 0 5px 0;font-weight:bold;'>Did you mean:</div>";
+          preview.forEach(product => {
+            const productDiv = createProductElement(product);
+            previewDiv.appendChild(productDiv);
+          });
+          searchResultsContainer.appendChild(previewDiv);
+        }
+      }
+    }
+  }
+
+  // Initialize
+  updateMenuList();
+  await fetchProducts(); // Fetch products and load all sections
+});

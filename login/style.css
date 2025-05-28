@@ -1,0 +1,176 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"poppins",sans-serif;
+}
+body {
+    background: url('../fruits/bruna-branco-7r1HxvVC7AY-unsplash.jpg') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container{
+    background:transparent;
+    backdrop-filter: blur(14px);
+    border: 4px solid white;
+    width:450px;
+    padding:1.5rem;
+    margin:50px auto;
+    border-radius:55px;
+    box-shadow:0 20px 35px rgba(0,0,1,0.9);
+}
+
+.container img{
+    position: relative;
+    left: 9vw;
+ 
+    width: 7vw;
+    height: 12vh;
+}
+form{
+    margin:0 2rem;
+}
+.form-title{
+    color: #fff6f6;
+    font-size:2rem;
+    font-weight:bold;
+    text-align:center;
+    padding:1.3rem;
+    margin-bottom:0.4rem;
+}
+input{
+    /* text-decoration: none; */
+    color:white;
+    width:100%;
+    background-color:transparent;
+    border:none;
+    border-bottom:1px solid #757575;
+    padding-left:1.5rem;
+    font-size:15px;
+}
+.input-group{
+    color:white;
+    padding:1% 0;
+    position:relative;
+    
+}
+.input-group i{
+    /* text-decoration: none; */
+    position:absolute;
+    color:rgb(255, 250, 250);
+    margin: 0 0 0 --9px;
+}
+input:focus{
+    background-color: transparent;
+    outline:transparent;
+    border-bottom:2px solid hsl(327,90%,28%);
+}
+input::placeholder{
+    color:transparent;
+}
+label{
+    color:#fff9f9;
+    position:relative;
+    left:1.2em;
+    top:-1.3em;
+    cursor:auto;
+    transition:0.3s ease all;
+}
+input:focus~label,input:not(:placeholder-shown)~label{
+    top:-3em;
+    color:hsl(327,90%,28%);
+    font-size:15px;
+}
+.recover{
+    text-align:right;
+    font-size:1rem;
+    margin-bottom:1rem;
+
+}
+.recover a{
+    text-decoration:none;
+    color:rgb(0, 0, 0);
+}
+.recover a:hover{
+    color:rgb(79, 111, 153);
+    text-decoration:underline;
+}
+.btn{
+    font-size:1.1rem;
+    padding:8px 0;
+    border-radius:5px;
+    outline:none;
+    border:none;
+    width:100%;
+    background:rgb(125,125,235);
+    color:white;
+    cursor:pointer;
+    transition:0.9s;
+}
+.btn:hover{
+    background:#07001f;
+}
+.or{
+    font-size:1.1rem;
+    margin-top:0.5rem;
+    text-align:center;
+}
+.icons{
+    text-align:center;
+}
+.icons i{
+    color:rgb(255, 255, 255);
+    padding:0.8rem 1.5rem;
+    border-radius:10px;
+    font-size:1.5rem;
+    cursor:pointer;
+    border:2px solid #dfe9f5;
+    margin:0 15px;
+    transition:1s;
+}
+.icons i:hover{
+    background:#5b5470;
+    font-size:1.6rem;
+    border:2px solid rgb(125,125,235);
+}
+.links{
+    display:flex;
+    justify-content:space-around;
+    padding:0 4rem;
+    margin-top:0.9rem;
+    font-weight:bold;
+}
+button{
+    color:rgb(89, 89, 244);
+    border:none;
+    background-color:transparent;
+    font-size:1rem;
+    font-weight:bold;
+}
+button:hover{
+    text-decoration:none;
+    color:rgb(47, 47, 146);
+}
+
+/* Alert Message Styling */
+.alert-message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+  color: #fff;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: opacity 0.3s ease;
+}
+
+.alert-message.success {
+  background-color: rgb(125,125,235); /* Matches button color */
+}
+
+.alert-message.error {
+  background-color: #dc3545; /* Standard red for errors */
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Grocery Store</title>
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/tab.css">
+
+    </head>
+    <body>
+        <section class="upnav">
+            <!-- Header -->
+            <header>
+                <div class="logo">
+                    <img src="images\logo-transparent.png" alt="Store Logo">
+                </div>
+
+                   <div class="search-bar">
+                    <form action="search-results.html" method="GET">
+                        <input type="text" name="q" placeholder="Search Product" required>
+                        <button type="submit"><i class="fa-solid fa-search"></i></button>
+                    </form>
+                </div>
+                <ul id="menuList">
+                    <li><a href="login/login.html">Login/SignUp</a></li>
+                    <li><a href = "wishlist.html">Wishlist </a></li>
+                    <li><a href = "cart.html"> <i
+                                class="fa-solid fa-cart-shopping"></i></a></li>
+
+                </ul>
+                <div class="menu-icon">
+                    <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                </div>
+            </header>
+        </section>
+
+        <!-- Navigation -->
+        <section class="navb">
+            <nav>
+                <ul>
+                    <li><a href="Home.html">Home</a></li>
+                    <li><a href="cart.html">Groceries</a></li>
+                    <li><a href="ourstory.html">Our Story</a></li>
+                    <li><a href="#">Gardening Tools</a></li>
+                </ul>
+            </nav>
+        </section>
+        <!-- offerbar -->
+
+        <section class="offer-bar">
+            <div class="offer-text">
+
+            </div>
+        </section>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h3>Now Offering</h3>
+                <h1>Home Deliveries</h1>
+                <p>Fresh Groceries To Your Doors</p>
+                <div class="hero-buttons">
+                    <button class="shop-all">Shop All</button>
+                    <button class="shop-fruits">Shop Fruits & Veg</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature">
+                <img src="/images/shipping-7000647_1280.png" alt="Delivery">
+                <p>Free Local Delivery<br>On all over $50</p>
+            </div>
+            <div class="feature">
+                <img
+                    src="/images/100-organic-quality-food-green-sticker-label-design_1017-25574-removebg-preview.png"
+                    alt="Freshness">
+                <p>Freshness Guarantee<br>From Farm to Fork</p>
+            </div>
+            <div class="feature">
+                <img
+                    src="/images/109135159-basket-vector-icon-isolated-on-transparent-background-basket-logo-concept-removebg-preview.png"
+                    alt="Checkout">
+                <p>Quick Checkout<br>Fill Your Basket Faster</p>
+            </div>
+        </section>
+        <!-- page 1 completed  -->
+
+        <!-- page  2 product section started  -->
+     
+        <section class="product-section">
+            <div class="pro1">
+                <h2>All Products</h2>
+                <div class="product-wrapper" id="productContainer"></div>
+            </div>
+        </section>
+
+    
+        <section class="product-section">
+            <div class="pro2">
+                <h2>Recently Viewed</h2>
+                <div class="product-wrapper" id="recentlyViewedContainer"></div>
+            </div>
+        </section>
+
+        
+        <section class="product-section">
+            <div class="pro3">
+                <h2>Popular Products</h2>
+                <div class="product-wrapper"
+                    id="popularProductsContainer"></div>
+            </div>
+        </section>
+
+  
+        <section class="product-section">
+            <div class="pro4">
+                <h2>Related Products</h2>
+                <div class="product-wrapper"
+                    id="relatedProductsContainer"></div>
+            </div>
+        </section>
+
+        <script src="https://kit.fontawesome.com/63daafd204.js"
+            crossorigin="anonymous"></script>
+        <script src="javascript/scipt.js"></script>
+
+    </body>
+</html>

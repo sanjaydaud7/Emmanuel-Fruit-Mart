@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details</title>
+    <link rel="stylesheet" href="css/productdetail.css" />
+  </head>
+  <body>
+    <section class="product">
+      <div class="product-image">
+        <img id="product-image" alt="Product Image" />
+      </div>
+      <div class="product-details">
+        <h1 id="product-name"></h1>
+        <p id="product-description"></p>
+        <h3 id="product-price"></h3>
+        <p><strong>Nutrients:</strong> <span id="nutrient"></span></p>
+        <p><strong>Calories:</strong> <span id="calories"></span></p>
+        <p><strong>Health Benefits:</strong> <span id="health-benefits"></span></p>
+        <div class="product-actions">
+          <div class="quantity-container">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" class="quantity-input" min="1" value="1" />
+          </div>
+          <div class="action-buttons">
+            <button id="add-to-cart" class="action-btn">Add to Cart</button>
+            <button id="buy-now" class="action-btn">Buy Now</button>
+            <button id="add-to-wishlist" class="action-btn">Add to Wishlist</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="/javascript/product-details.js"></script>
+  </body>
+</html>

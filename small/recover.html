@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Recovery</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+       
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f0f0f0;
+      background: url('../images/loginpageimage.jpg') no-repeat center center/cover;
+    }
+    .container {
+
+      border: 3px solid rgb(147, 107, 107);
+      background:transparent;
+      backdrop-filter: blur(88px);
+      padding: 3rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .container img{
+      position: relative;
+      top: -2rem;
+      width: 12vw;
+      height: 18vh;
+    }
+    .container h1 {
+      margin-bottom: 2rem;
+    }
+    .input-group {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 1rem 0;
+      padding: 0.5rem;
+    }
+    .input-group i {
+      margin-right: 10px;
+      color: #555;
+    }
+    .input-group input {
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 0.5rem;
+    }
+    .btn {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn:hover {
+      background-color: #219150;
+    }
+    .back-link {
+      margin-top: 1rem;
+    }
+    .back-link a {
+      text-decoration: none;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="/images/logo-transparent.png" alt="logo">
+    <h1>Recover Password</h1>
+    <p>Enter your registered email to receive a reset link.</p>
+    <form id="recoverForm">
+      <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="recoverEmail" name="email" placeholder="Email" required>
+      </div>
+      <input type="submit" class="btn" value="Send Reset Link">
+    </form>
+    <div class="back-link">
+        <a href="../login/login.html">&larr; Back to Login</a>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('recoverForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('recoverEmail').value;
+      
+      // Replace this with actual backend API call
+      alert("Recovery link sent to " + email);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Wishlist</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('/fruits/mockup-graphics-XiWQbLEhFyo-unsplash\ \(1\).jpg') no-repeat center center/cover;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #f9f9f9;
+      font-weight: bolder;
+      font-size: 4em;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .wishlist-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .item {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 220px;
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    .item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    .item h3 {
+      color: #2e7d32;
+      margin: 0 0 10px 0;
+    }
+    .item p {
+      margin: 5px 0;
+      font-weight: bold;
+      color: #444;
+    }
+    .remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: red;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Wishlist</h1>
+
+  <div class="wishlist-container" id="wishlistItems">
+    <!-- Wishlist items will be loaded here -->
+  </div>
+
+  <script>
+   function loadWishlist() {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const container = document.getElementById("wishlistItems");
+  container.innerHTML = '';
+
+  if (wishlist.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#999;">Your wishlist is empty.</p>';
+    return;
+  }
+
+  wishlist.forEach((item, index) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'item';
+    itemDiv.innerHTML = `
+      <button class="remove-btn" onclick="removeFromWishlist(${index})">❌</button>
+      <h3>${item.name}</h3>
+      <p>Price: ₹${item.price.toFixed(2)}/kg</p>
+      <a href="product-details.html?product=${encodeURIComponent(item.name.toLowerCase())}">View Details</a>
+    `;
+    container.appendChild(itemDiv);
+  });
+}
+
+function removeFromWishlist(index) {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  wishlist.splice(index, 1);
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  loadWishlist();
+}
+
+window.onload = loadWishlist;
+  </script>
+
+</body>
+</html>

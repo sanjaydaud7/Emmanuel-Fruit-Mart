@@ -1,0 +1,230 @@
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .search-bar {
+
+        left: 17%;
+        width: 55vw;
+        height: 6.5vh;
+    }
+
+    .search-bar input {
+        font-size: 2.2vh;
+    }
+
+    .search-bar input::placeholder {
+        font-size: 2vh;
+    }
+
+    .search-bar button {
+        width: 8%;
+        height: 4vh;
+    }
+
+    .search-bar button i {
+        font-size: 2.2vh;
+    }
+
+    #menuList {
+        left: 75vw;
+        width: 25vw;
+    }
+
+    /* Offer bar adjustments for 1024px */
+    .offer-bar {
+        height: 3.5vh;
+    }
+
+    .offer-text {
+        font-size: 2vh;
+        top: 0.5vh; /* Adjusted for better vertical centering */
+    }
+}
+
+/* For screens 768px and below */
+@media (max-width: 768px) {
+    header {
+        height: 10vh;
+        padding: 1vh 2vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    .menu-icon {
+        display: block;
+        position: absolute;
+        left: 93vw;
+        top: 4.5vh;
+    }
+
+    .menu-icon i {
+        font-size: 6vw; /* Increased size for better visibility */
+    }
+
+    #menuList {
+        position: absolute;
+        top: 10vh;
+        /* left: vw; */
+        width: 30%;
+        /* color: black; */
+        background: white;
+        flex-direction: column;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+        z-index: 1000;
+        border-top: 1px solid #eee;
+    }
+
+    #menuList li {
+        width: 100%;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+    }
+
+    #menuList li:last-child {
+        border-bottom: none;
+    }
+
+     #menuList li a,
+    #logoutBtn {
+        display: block;
+        padding: 15px;
+        font-size: 2vh;
+        color: #000; /* Make menu icon list item black */
+        text-decoration: none;
+    }
+
+    #menuList li a:hover,
+    #logoutBtn:hover {
+        background-color: #f5f5f5;
+    }
+
+    .logo img {
+        width: 15vh;
+        height: auto;
+    }
+
+   .search-bar {
+        left: 25%;
+        width: 65vw;
+        height: 5vh;
+        top: 4vh;
+        border-width: 1px; /* Reduce border thickness */
+    }
+
+    .search-bar input {
+        font-size: 2vh;
+    }
+
+    .search-bar input::placeholder {
+        font-size: 1.8vh;
+    }
+
+    .search-bar button {
+        width: 16%;
+        height: 3.5vh;
+    }
+
+
+    .search-bar button img,
+    .search-bar button i {
+         font-size: 2.2vh;
+        margin: 0 auto;
+        height: 2vh;
+        width: auto;
+    }
+
+    nav ul li a {
+        font-size: 2vh;
+    }
+
+    /* Offer bar adjustments for 768px */
+    .offer-text {
+        font-size: 1.6vh; /* Slightly smaller for better fit */
+        top: 0.4vh; /* Adjusted for better centering */
+        animation: scroll-left 12s linear infinite; /* Slightly faster animation for smaller screens */
+    }
+
+    /* Profile Icon */
+    .profile-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+}
+
+/* For screens 480px and below */
+@media (max-width: 480px) {
+    header {
+        padding: 1vh 3vw;
+    }
+
+    .menu-icon {
+
+        height: 2.5vh; /* Increased from previous */
+    }
+
+    .menu-icon i {
+       
+        font-size: 7vw; /* Increased size for better visibility */
+    }
+ 
+
+    #menuList {
+        position: absolute;
+        width: 100%;
+        left: 50vw;
+        top: 10vh;
+        justify-content: center;
+        text-align: right;
+    }
+
+  
+    #menuList li a,
+    #logoutBtn {
+        font-size: 4vw;
+        padding: 12px;
+        color: #000; /* Make menu icon list item black */
+    }
+
+     .search-bar {
+        left: 18%;
+        width: 70vw;
+        height: 5vh;
+        top: 4vh;
+        border-width: 1px; /* Reduce border thickness */
+    }
+
+    .search-bar input {
+        font-size: 1.8vh;
+    }
+
+    .search-bar input::placeholder {
+        font-size: 1.6vh;
+    }
+
+    .search-bar button {
+        width: 15%;
+        height: 4vh;
+    }
+
+    .search-bar button i {
+        font-size: 1.8vh;
+    }
+
+    .logo img {
+        position: static;
+        top: -2vh;
+        width: 17vw;
+        height: 12vh;
+    }
+
+    /* Offer bar adjustments for 480px */
+    .offer-text {
+        font-size: 2vh; /* Further reduced for small screens */
+        top: 0.3vh; /* Adjusted for better centering */
+        animation: scroll-left 10s linear infinite; /* Faster animation for very small screens */
+    }
+}

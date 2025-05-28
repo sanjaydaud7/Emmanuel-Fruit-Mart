@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fruit Shop</title>
+        <style>
+        body { font-family: 'Arial', sans-serif; background: url('./fruits/courier-delivering-groceries-home.jpg') no-repeat center center/cover; margin: 0; padding: 20px; }
+        h1 { color: #ffffff; font-size: 2em; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        .products-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 20px 0; }
+        .product { background-color: white; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 220px; transition: transform 0.3s ease; }
+        .product:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); }
+        .product h3 { color: #d81b60; margin: 0 0 10px 0; font-size: 1.2em; }
+        .product p { color: #555; margin: 5px 0; font-weight: bold; }
+        .product a { text-decoration: none; color: #ff6f00; }
+        .cart { background:transparent;  backdrop-filter: blur(3px); border-radius: 15px; padding: 20px; margin: 20px auto; max-width: 500px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .cart h2 { color: #ffffff; margin-top: 0; border-bottom: 2px solid #ff6f00; padding-bottom: 10px; }
+        .cart ul { list-style: none; padding: 0; margin: 10px 0; }
+        .cart li { padding: 8px 0; border-bottom: 1px dashed #ddd; color: #333; }
+        form#shippingForm {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    form#shippingForm input {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    form#shippingForm input:focus {
+        outline: none;
+        border-color: #2e7d32;
+    }        
+        
+        .cart p { font-size: 1.2em; color: #d81b60; font-weight: bold; margin: 10px 0 0; }
+    </style>
+    </head>
+    <body>
+        <h1>Fresh Fruits & Vegetables Market</h1>
+
+        <div class="products-container" id="products">
+            <div class="product">
+
+            </div>
+            <div class="product">
+
+            </div>
+            <div class="product">
+
+            </div>
+        </div>
+
+        <div class="cart">
+            <h2>Shopping Cart</h2>
+            <ul id="cartItems"></ul>
+            <p>Total: ₹ <span id="cartTotal">0.00</span></p>
+            <!-- Shipping Address Form -->
+            <h3>Shipping Address</h3>
+            <form id="shippingForm">
+                <input type="text" id="fullName" placeholder="Full Name"
+                    required />
+                <input type="text" id="addressLine1"
+                    placeholder="Address Line 1" required />
+                <input type="text" id="addressLine2"
+                    placeholder="Address Line 2 (Optional)" />
+                <input type="text" id="city" placeholder="City" required />
+                <input type="text" id="state" placeholder="State" required />
+                <input type="text" id="zipCode" placeholder="Zip Code"
+                    required />
+                <input type="text" id="phoneNumber" placeholder="Phone Number"
+                    required />
+            </form>
+            <button id="saveAddressBtn"
+                style="margin-top: 15px; background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">
+                Save Address
+            </button>
+
+            <!-- Saved Address Container -->
+            <div id="savedAddressContainer"
+                style="margin-top: 20px; display: none; background-color: #f9f9f9; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <h4>Saved Address</h4>
+                <p id="savedAddress"></p>
+                <button id="editAddressBtn"
+                    style="background-color: #ff9800; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer;">
+                    Edit Address
+                </button>
+            </div>
+            <button onclick="handlePayment()"
+                style="margin-top: 15px; background-color: #2e7d32; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">
+                Pay Now
+            </button>
+        </div>
+
+        <script>
+
+        // function to save shipping address 
+        document.getElementById("saveAddressBtn").addEventListener("click", function () {
+    const fullName = document.getElementById("fullName").value.trim();
+    const addressLine1 = document.getElementById("addressLine1").value.trim();
+    const addressLine2 = document.getElementById("addressLine2").value.trim();
+    const city = document.getElementById("city").value.trim();
+    const state = document.getElementById("state").value.trim();
+    const zipCode = document.getElementById("zipCode").value.trim();
+    const phoneNumber = document.getElementById("phoneNumber").value.trim();
+
+    if (!fullName || !addressLine1 || !city || !state || !zipCode || !phoneNumber) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    const shippingAddress = {
+        fullName,
+        addressLine1,
+        addressLine2,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+    };
+
+    // Save the address to localStorage
+    localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
+
+    // Display the saved address
+    displaySavedAddress();
+});
+
+function displaySavedAddress() {
+    const savedAddress = JSON.parse(localStorage.getItem("shippingAddress"));
+    if (savedAddress) {
+        const savedAddressContainer = document.getElementById("savedAddressContainer");
+        const savedAddressElement = document.getElementById("savedAddress");
+
+        savedAddressElement.innerHTML = `
+            <strong>${savedAddress.fullName}</strong><br>
+            ${savedAddress.addressLine1}<br>
+            ${savedAddress.addressLine2 ? savedAddress.addressLine2 + "<br>" : ""}
+            ${savedAddress.city}, ${savedAddress.state} - ${savedAddress.zipCode}<br>
+            Phone: ${savedAddress.phoneNumber}
+        `;
+
+        savedAddressContainer.style.display = "block";
+    }
+}
+
+document.getElementById("editAddressBtn").addEventListener("click", function () {
+    const savedAddress = JSON.parse(localStorage.getItem("shippingAddress"));
+    if (savedAddress) {
+        // Populate the form with the saved address
+        document.getElementById("fullName").value = savedAddress.fullName;
+        document.getElementById("addressLine1").value = savedAddress.addressLine1;
+        document.getElementById("addressLine2").value = savedAddress.addressLine2;
+        document.getElementById("city").value = savedAddress.city;
+        document.getElementById("state").value = savedAddress.state;
+        document.getElementById("zipCode").value = savedAddress.zipCode;
+        document.getElementById("phoneNumber").value = savedAddress.phoneNumber;
+
+        // Hide the saved address container
+        document.getElementById("savedAddressContainer").style.display = "none";
+    }
+});
+
+// Load the saved address on page load
+window.onload = function () {
+    displaySavedAddress();
+};        
+
+
+// function to load from local storage 
+function loadCart() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Show product cards from cart
+    const productsContainer = document.getElementById('products');
+    productsContainer.innerHTML = ''; // Clear default items
+
+    cart.forEach(item => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product';
+
+        productDiv.innerHTML = `
+            <h3>${item.name}</h3>
+            <p>Price: ₹${item.price.toFixed(2)}/kg</p>
+            <p>Quantity: ${item.quantity}</p>
+            <p>Total: ₹${(item.price * item.quantity).toFixed(2)}</p>
+            <a href="product-details.html?product=${encodeURIComponent(item.name.toLowerCase())}">View Details</a>
+        `;
+
+        productsContainer.appendChild(productDiv);
+    });
+
+    // Update cart summary
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    updateCart(cart, total);
+}
+        function handlePayment() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
+
+        const total = document.getElementById('cartTotal').textContent;
+        alert(`Thank you for your purchase! You've been charged ₹${total}.`);
+
+        // Clear the cart
+        localStorage.removeItem('cart');
+        loadCart(); // Refresh UI
+    }
+        function removeFromCart(index) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.splice(index, 1); // Remove item at given index
+    localStorage.setItem('cart', JSON.stringify(cart)); // Update storage
+    loadCart(); // Reload cart and UI
+}
+
+    
+        function updateCart(cart, total) {
+    const cartItems = document.getElementById('cartItems');
+    cartItems.innerHTML = '';
+
+    cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            ${item.name} - ₹${item.price * item.quantity.toFixed(2)} 
+            <button style="margin-left: 10px; background: none; border: none; color: red; cursor: pointer;" onclick="removeFromCart(${index})">
+                ❌
+            </button>
+        `;
+        cartItems.appendChild(li);
+    });
+
+    document.getElementById('cartTotal').textContent = total.toFixed(2);
+
+
+}
+
+    
+        window.onload = loadCart;
+    </script>
+
+    </body>
+</html>

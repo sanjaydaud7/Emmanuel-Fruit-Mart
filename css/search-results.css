@@ -1,0 +1,221 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+/* Wave pattern */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.2)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x bottom;
+  opacity: 0.3;
+  z-index: -1;
+  animation: waveFlow 20s linear infinite;
+}
+
+/* Animated e-commerce icons */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M30,20 L40,20 A20,20 0 0,1 60,40 L60,50 L30,50 Z" fill="rgba(255,183,77,0.15)"/><circle cx="70" cy="30" r="10" fill="rgba(77,182,172,0.15)"/></svg>') repeat;
+  opacity: 0.1;
+  z-index: -1;
+  animation: iconFloat 25s linear infinite;
+}
+
+@keyframes waveFlow {
+  0% { background-position: 0 100%; }
+  100% { background-position: 1440px 100%; }
+}
+
+@keyframes iconFloat {
+  0% { background-position: 0 0; transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+  100% { background-position: 100px 100px; transform: translateY(0); }
+}
+
+.search-results {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.search-results h2 {
+  font-size: 1.8rem;
+  color: #222;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-results h2 span {
+  color: #e67e22;
+}
+
+.product-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.product {
+  background: #f8f3f3;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.product:hover {
+  transform: scale(1.05);
+}
+
+.product img {
+  max-width: 100%;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.product h3 {
+  font-size: 1.2rem;
+  color: #222;
+  margin: 10px 0;
+}
+
+.product .price {
+  font-size: 1rem;
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.calorie-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.view-btn {
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  color: #fff;
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.view-btn:hover {
+  background: linear-gradient(135deg, #d35400, #e67e22);
+}
+
+#noResults {
+  font-size: 1.2rem;
+  color: #555;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Responsive Design */
+  
+ @media (max-width: 1024px) {
+  .product-wrapper {
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+    gap: 12px;
+  }
+}
+
+
+  
+@media (max-width: 768px) {
+  .search-results {
+    padding: 15px;
+  }
+
+  .search-results h2 {
+    font-size: 1.5rem;
+  }
+
+  .product-wrapper {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    /* padding-left: vw; */
+    gap: 10px;
+  }
+  .product{
+    max-width: 42vw;
+    width: 100%;
+    max-height: 82vh;
+    height: 100%;
+  }
+
+  .product img {
+    height: 120px;
+  }
+
+  .product h3 {
+    font-size: 1rem;
+  }
+
+  .view-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-results {
+    padding: 10px;
+  }
+
+  .search-results h2 {
+    font-size: 1.3rem;
+  }
+
+  .product-wrapper {
+    grid-template-columns: 1fr;
+    justify-items: center;
+
+    gap: 10px;
+  }
+.product{
+  max-width: 73vw;
+  width: 100%;
+  height: 40vh;
+}
+  .product img {
+    height: 100px;
+  }
+
+  .product h3 {
+    font-size: 0.9rem;
+  }
+
+  .view-btn {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+}

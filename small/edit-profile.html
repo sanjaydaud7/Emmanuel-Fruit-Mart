@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('/fruits/sneha-cecil-Qt6ojt3CacE-unsplash.jpg') no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+  background: transparent;
+  backdrop-filter: blur(53px);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 600px; /* Reduced from 1000px */
+  width: 100%;
+  
+  height: 90vh;
+  color: #ffffff;
+}
+
+    .form-title {
+      font-size: 28px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      position: relative;
+      flex: 1 1 45%;
+      min-width: 250px;
+    }
+
+    .input-group i {
+      position: absolute;
+      top: 12px;
+      left: 10px;
+      color: #888;
+    }
+
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+      width: 100%;
+      padding: 10px 10px 10px 35px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .input-group textarea {
+      resize: vertical;
+    }
+
+    .input-group label {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: #3498db;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background-color: #2980b9;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      display: block;
+      color: #555;
+      text-decoration: none;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="form-title">Edit Profile</h1>
+    <form id="editProfileForm">
+      <div class="form-row">
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" name="firstName" id="firstName" placeholder="First Name" required />
+          <label for="firstName">First Name</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" name="lastName" id="lastName" placeholder="Last Name" required />
+          <label for="lastName">Last Name</label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" name="email" id="email" placeholder="Email" required />
+          <label for="email">Email</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-phone"></i>
+          <input type="tel" name="phone" id="phone" placeholder="Phone Number" required />
+          <label for="phone">Phone Number</label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-group">
+          <i class="fas fa-calendar"></i>
+          <input type="date" name="dob" id="dob" />
+          <label for="dob">Date of Birth</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-user-circle"></i>
+          <select name="gender" id="gender">
+            <option value="" disabled selected>Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          <label for="gender">Gender</label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-group">
+          <i class="fas fa-image"></i>
+          <input type="file" name="profilePic" id="profilePic" accept="image/*" />
+          <label for="profilePic">Profile Picture</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-home"></i>
+          <textarea name="address" id="address" rows="2" placeholder="Full Address"></textarea>
+          <label for="address">Address</label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-group">
+          <i class="fas fa-city"></i>
+          <input type="text" name="city" id="city" placeholder="City" />
+          <label for="city">City</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-map-marker-alt"></i>
+          <input type="text" name="state" id="state" placeholder="State" />
+          <label for="state">State</label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-group">
+          <i class="fas fa-mail-bulk"></i>
+          <input type="text" name="zip" id="zip" placeholder="ZIP Code" />
+          <label for="zip">ZIP Code</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-globe"></i>
+          <input type="text" name="country" id="country" placeholder="Country" />
+          <label for="country">Country</label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-group" style="flex: 1 1 100%;">
+          <label>
+            <input type="checkbox" name="newsletter" id="newsletter" />
+            Subscribe to Newsletter
+          </label>
+        </div>
+      </div>
+
+      <input type="submit" class="btn" value="Update Profile" />
+    </form>
+    <a href="../home.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  </div>
+</body>
+</html>

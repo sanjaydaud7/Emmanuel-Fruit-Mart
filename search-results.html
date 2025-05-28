@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Search Results - Grocery Store</title>
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/tab.css">
+        <link rel="stylesheet" href="css/search-results.css">
+    </head>
+    <body>
+        <section class="upnav">
+            <!-- Header -->
+            <header>
+                <div class="logo">
+                    <img src="images/logo-transparent.png" alt="Store Logo">
+                </div>
+                <div class="search-bar">
+                    <form action="search-results.html" method="GET">
+                        <input type="text" name="q" placeholder="Search Product" required>
+                        <button type="submit"><i class="fa-solid fa-search"></i></button>
+                    </form>
+                </div>
+                <ul id="menuList">
+                    <li><a href="login/login.html">Login/SignUp</a></li>
+                    <li><a href="wishlist.html">Wishlist</a></li>
+                    <li><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                </ul>
+                <div class="menu-icon">
+                    <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                </div>
+            </header>
+        </section>
+
+        <!-- Navigation -->
+        <section class="navb">
+            <nav>
+                <ul>
+                    <li><a href="Home.html">Home</a></li>
+                    <li><a href="cart.html">Groceries</a></li>
+                    <li><a href="ourstory.html">Our Story</a></li>
+                    <li><a href="#">Gardening Tools</a></li>
+                </ul>
+            </nav>
+        </section>
+
+        <!-- Search Results Section -->
+        <section class="search-results">
+            <h2>Search Results for "<span id="searchQuery"></span>"</h2>
+            <div class="product-wrapper" id="searchResultsContainer"></div>
+            <p id="noResults" style="display: none;">No products found matching your search.</p>
+        </section>
+
+        <script src="https://kit.fontawesome.com/63daafd204.js" crossorigin="anonymous"></script>
+        <script src="./javascript/scipt.js"></script>
+    </body>
+</html>
