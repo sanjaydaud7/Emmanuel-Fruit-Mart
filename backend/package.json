@@ -1,14 +1,10 @@
 {
-  "name": "backend",
+  "name": "auth-system",
   "version": "1.0.0",
-  "main": "server.js",
-  "engines": {
-    "node": "18.x"
-  },
+  "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "preinstall": "apt-get update && apt-get install -y python3 make g++"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
