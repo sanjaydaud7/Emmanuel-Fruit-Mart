@@ -16,9 +16,12 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const authRoutes = require('./routes/auth');
-app.use("/api/auth", authRoutes);
 
+// Routes
+const authRoutes = require('./routes/auth');
+const productRoutes = require('./routes/products'); // Add product routes
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes); // Add product API endpoint
 
 
 // MongoDB Connection

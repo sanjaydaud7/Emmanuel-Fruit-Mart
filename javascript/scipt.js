@@ -8,329 +8,64 @@ document.addEventListener("DOMContentLoaded", async function () {
   const searchQuerySpan = document.getElementById("searchQuery");
   const noResults = document.getElementById("noResults");
 
-  // 25 fallback products (minimal example, add more as needed)
-// const fallbackProducts = [
-//   {
-//     id: 1,
-//     name: "Red Apple",
-//     price: "₹120/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg",
-//     category: "Fruit",
-//     description: "Juicy red apples rich in antioxidants and natural sweetness.",
-//     nutrients: ["Vitamin C", "Fiber", "Antioxidants"],
-//     calories: "52 kcal per 100g",
-//     healthBenefits: "Supports heart health;boosts immunity;improves digestion.",
-//     tags: ["Diabetic Friendly", "Best for Snack"]
-//   },
-//   {
-//     id: 2,
-//     name: "Banana",
-//     price: "₹50/dozen",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg",
-//     category: "Fruit",
-//     description: "Fresh bananas perfect for energy and digestion.",
-//     nutrients: ["Potassium", "Vitamin B6", "Fiber"],
-//     calories: "89 kcal per 100g",
-//     healthBenefits: "Regulates blood pressure;provides energy;supports digestion.",
-//     tags: ["Energy Booster", "Kid Friendly"]
-//   },
-//   {
-//     id: 3,
-//     name: "Carrot",
-//     price: "₹40/kg",
-//     image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2Fycm90fGVufDB8fDB8fHww",
-//     category: "Vegetable",
-//     description: "Crisp orange carrots packed with beta-carotene and fiber.",
-//     nutrients: ["Beta-Carotene", "Vitamin A", "Fiber"],
-//     calories: "41 kcal per 100g",
-//     healthBenefits: "Improves vision;supports skin health.",
-//     tags: ["Best for Juice", "Vision Booster"]
-//   },
-//   {
-//     id: 4,
-//     name: "Broccoli",
-//     price: "₹90/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/0/03/Broccoli_and_cross_section_edit.jpg",
-//     category: "Vegetable",
-//     description: "Nutrient-rich green broccoli florets.",
-//     nutrients: ["Vitamin C", "Vitamin K", "Folate"],
-//     calories: "34 kcal per 100g",
-//     healthBenefits: "Detoxifies body;strengthens bones.",
-//     tags: ["Detox", "Bone Health"]
-//   },
-//   {
-//     id: 5,
-//     name: "Strawberry",
-//     price: "₹180/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/2/29/PerfectStrawberry.jpg",
-//     category: "Fruit",
-//     description: "Sweet and juicy strawberries rich in antioxidants.",
-//     nutrients: ["Vitamin C", "Manganese", "Fiber"],
-//     calories: "33 kcal per 100g",
-//     healthBenefits: "Improves skin;reduces inflammation.",
-//     tags: ["Skin Friendly", "Antioxidant Rich"]
-//   },
-//   {
-//     id: 6,
-//     name: "Spinach",
-//     price: "₹30/bundle",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/0/08/Spinach_leaves.jpg",
-//     category: "Vegetable",
-//     description: "Leafy green spinach loaded with iron and vitamins.",
-//     nutrients: ["Iron", "Vitamin K", "Magnesium"],
-//     calories: "23 kcal per 100g",
-//     healthBenefits: "Boosts hemoglobin;strengthens immunity.",
-//     tags: ["Iron Rich", "Leafy Green"]
-//   },
-//   {
-//     id: 7,
-//     name: "Orange",
-//     price: "₹60/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/c/c4/Orange-Fruit-Pieces.jpg",
-//     category: "Fruit",
-//     description: "Citrus fruit rich in Vitamin C and flavor.",
-//     nutrients: ["Vitamin C", "Calcium", "Fiber"],
-//     calories: "47 kcal per 100g",
-//     healthBenefits: "Boosts immunity;reduces fatigue.",
-//     tags: ["Immunity Booster", "Juicy"]
-//   },
-//   {
-//     id: 8,
-//     name: "Grapes",
-//     price: "₹100/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Table_grapes_on_white.jpg",
-//     category: "Fruit",
-//     description: "Sweet grapes loaded with antioxidants.",
-//     nutrients: ["Resveratrol", "Vitamin C", "Potassium"],
-//     calories: "69 kcal per 100g",
-//     healthBenefits: "Improves heart health;fights aging.",
-//     tags: ["Heart Healthy", "Snack Friendly"]
-//   },
-//   {
-//     id: 9,
-//     name: "Cucumber",
-//     price: "₹25/each",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/9/96/Cucumis_sativus_-_Long_cucumber.jpg",
-//     category: "Vegetable",
-//     description: "Cool and refreshing cucumbers.",
-//     nutrients: ["Water", "Vitamin K", "Potassium"],
-//     calories: "16 kcal per 100g",
-//     healthBenefits: "Hydrates body;good for skin.",
-//     tags: ["Hydrating", "Salad Ready"]
-//   },
-//   {
-//     id: 10,
-//     name: "Mango",
-//     price: "₹150/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/9/90/Hapus_Mango.jpg",
-//     category: "Fruit",
-//     description: "Delicious tropical mangoes.",
-//     nutrients: ["Vitamin A", "Vitamin C", "Beta-Carotene"],
-//     calories: "60 kcal per 100g",
-//     healthBenefits: "Improves eye health;boosts immunity.",
-//     tags: ["Seasonal", "Sweet Treat"]
-//   },
-//   {
-//     id: 11,
-//     name: "Pineapple",
-//     price: "₹80/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Pineapple_and_cross_section.jpg",
-//     category: "Fruit",
-//     description: "Tangy and tropical pineapple.",
-//     nutrients: ["Vitamin C", "Bromelain", "Manganese"],
-//     calories: "50 kcal per 100g",
-//     healthBenefits: "Aids digestion;fights inflammation.",
-//     tags: ["Digestive Aid", "Tropical"]
-//   },
-//   {
-//     id: 12,
-//     name: "Tomato",
-//     price: "₹30/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/8/88/Bright_red_tomato_and_cross_section02.jpg",
-//     category: "Vegetable",
-//     description: "Red and juicy tomatoes.",
-//     nutrients: ["Lycopene", "Vitamin C", "Potassium"],
-//     calories: "18 kcal per 100g",
-//     healthBenefits: "Good for skin;fights cancer.",
-//     tags: ["Salad Favorite", "Lycopene Rich"]
-//   },
-//   {
-//     id: 13,
-//     name: "Cauliflower",
-//     price: "₹35/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/8/88/Cauliflower.JPG",
-//     category: "Vegetable",
-//     description: "White cruciferous veggie full of fiber.",
-//     nutrients: ["Vitamin C", "Choline", "Fiber"],
-//     calories: "25 kcal per 100g",
-//     healthBenefits: "Improves digestion;supports brain health.",
-//     tags: ["Brain Food", "Low Carb"]
-//   },
-//   {
-//     id: 14,
-//     name: "Lettuce",
-//     price: "₹25/bundle",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Iceberg_lettuce_in_SB.jpg",
-//     category: "Vegetable",
-//     description: "Crisp green lettuce.",
-//     nutrients: ["Vitamin K", "Folate", "Iron"],
-//     calories: "15 kcal per 100g",
-//     healthBenefits: "Promotes bone strength;good for weight loss.",
-//     tags: ["Salad Base", "Weight Friendly"]
-//   },
-//   {
-//     id: 15,
-//     name: "Blueberries",
-//     price: "₹200/250g",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/2/20/Blueberries.jpg",
-//     category: "Fruit",
-//     description: "Antioxidant-rich berries.",
-//     nutrients: ["Vitamin C", "Vitamin K", "Antioxidants"],
-//     calories: "57 kcal per 100g",
-//     healthBenefits: "Improves memory;reduces aging.",
-//     tags: ["Brain Food", "Antioxidant Rich"]
-//   },
-//   {
-//     id: 16,
-//     name: "Potato",
-//     price: "₹20/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Potatoes.jpg",
-//     category: "Vegetable",
-//     description: "Starchy root vegetable.",
-//     nutrients: ["Carbs", "Vitamin C", "Potassium"],
-//     calories: "77 kcal per 100g",
-//     healthBenefits: "Provides energy;supports muscle function.",
-//     tags: ["Staple Food", "Versatile"]
-//   },
-//   {
-//     id: 17,
-//     name: "Peas",
-//     price: "₹60/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/4/44/Green_peas_on_white.jpg",
-//     category: "Vegetable",
-//     description: "Fresh green peas.",
-//     nutrients: ["Protein", "Fiber", "Vitamin K"],
-//     calories: "81 kcal per 100g",
-//     healthBenefits: "Supports weight loss;builds muscle.",
-//     tags: ["Protein Rich", "Snackable"]
-//   },
-//   {
-//     id: 18,
-//     name: "Pomegranate",
-//     price: "₹120/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/c/c6/Pomegranate_fruit_-_whole_and_section.jpg",
-//     category: "Fruit",
-//     description: "Juicy red pomegranate seeds.",
-//     nutrients: ["Vitamin C", "Potassium", "Polyphenols"],
-//     calories: "83 kcal per 100g",
-//     healthBenefits: "Boosts blood flow;improves skin.",
-//     tags: ["Heart Healthy", "Skin Booster"]
-//   },
-//   {
-//     id: 19,
-//     name: "Watermelon",
-//     price: "₹15/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Watermelon_cross_BNC.jpg",
-//     category: "Fruit",
-//     description: "Refreshing summer fruit.",
-//     nutrients: ["Water", "Lycopene", "Vitamin C"],
-//     calories: "30 kcal per 100g",
-//     healthBenefits: "Hydrates body;reduces blood pressure.",
-//     tags: ["Hydrating", "Best for Summer"]
-//   },
-//   {
-//     id: 20,
-//     name: "Beetroot",
-//     price: "₹45/kg",
-//     image: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Beets-Bundle.jpg",
-//     category: "Vegetable",
-//     description: "Dark purple root veggie.",
-//     nutrients: ["Iron", "Nitrates", "Folate"],
-//     calories: "43 kcal per 100g",
-//     healthBenefits: "Improves blood flow;boosts stamina.",
-//     tags: ["Blood Booster", "Juicing"]
-//   }
-// ];
+  
 
   let products = [];
 
   // Fetch Products from Google Sheets
-  async function fetchProducts() {
-    try {
-      console.log("Fetching products from Google Sheets...");
-      const SHEET_ID = "1hqAtHke4TZe2lz6NegFshGk1zerca_OeX45LPKn2tII"; // Replace with your Google Sheet ID
-      const API_KEY = "AIzaSyBQkP7XXC9jTeB92IGyvLvUBBWWXDakUh4"; // Replace with your Google Sheets API key
-      const RANGE = "products!A1:J"; // Adjust range based on your sheet (e.g., A1:J for 10 columns)
+// script.js
+async function fetchProducts() {
+  try {
+    console.log('Fetching products from MongoDB...');
+    const response = await fetch('http://localhost:5000/api/products', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-      const response = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/1hqAtHke4TZe2lz6NegFshGk1zerca_OeX45LPKn2tII/values/products!A1:J?key=AIzaSyBQkP7XXC9jTeB92IGyvLvUBBWWXDakUh4`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+    }
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
-      }
+    const productsData = await response.json();
+    console.log('Fetched products from MongoDB:', productsData);
 
-      const data = await response.json();
-      console.log("Fetched data from Google Sheets:", data);
+    // Map data to ensure correct format
+    products = productsData.map(product => ({
+      id: product.id,
+      name: product.name || 'Unknown Product',
+      price: product.price || 'N/A',
+      image: product.image || 'https://via.placeholder.com/150',
+      category: product.category || 'Unknown',
+      description: product.description || '',
+      nutrients: Array.isArray(product.nutrients) ? product.nutrients : [],
+      calories: product.calories || 'N/A',
+      healthBenefits: product.healthBenefits || '',
+      tags: Array.isArray(product.tags) ? product.tags : [],
+    }));
 
-      // Validate response
-      if (!data.values || !Array.isArray(data.values)) {
-        throw new Error("Invalid data format from Google Sheets");
-      }
+    console.log('Processed products:', products);
 
-      // Assume first row is headers, skip it
-      const headers = data.values[0];
-      const rows = data.values.slice(1);
+    // Verify DOM elements
+    if (!productContainer) console.error('productContainer not found in DOM');
+    if (!recentlyViewedContainer) console.error('recentlyViewedContainer not found in DOM');
+    if (!popularProductsContainer) console.error('popularProductsContainer not found in DOM');
+    if (!relatedProductsContainer) console.error('relatedProductsContainer not found in DOM');
 
-      // Map rows to product objects
-      products = rows.map(row => {
-        console.log("Processing row:", row);
-        return {
-          id: parseInt(row[0]) || 0,
-          name: row[1] || "Unknown Product",
-          price: row[2] || "N/A",
-          image: row[3] || "https://via.placeholder.com/150",
-          category: row[4] || "Unknown",
-          description: row[5] || "",
-          nutrients: row[6]
-            ? row[6].split(/[;,]/).map(n => n.trim()).filter(n => n)
-            : [],
-          calories: row[7] || "N/A",
-          healthBenefits: row[8] || "",
-          tags: row[9]
-            ? row[9].split(/[;,]/).map(t => t.trim()).filter(t => t)
-            : [],
-        };
-      });
-
-      console.log("Processed products:", products);
-
-      // Verify DOM elements
-      if (!productContainer) console.error("productContainer not found in DOM");
-      if (!recentlyViewedContainer) console.error("recentlyViewedContainer not found in DOM");
-      if (!popularProductsContainer) console.error("popularProductsContainer not found in DOM");
-      if (!relatedProductsContainer) console.error("relatedProductsContainer not found in DOM");
-
-      // Load all sections
-      loadAllProducts();
-      loadRecentlyViewed();
-      loadPopularProducts();
-      loadSearchResults();
-    } catch (error) {
-      console.error('Error fetching products:', error.message);
-      products = [];
-      if (productContainer) {
-        productContainer.innerHTML = `<p>Failed to load products: ${error.message}. Please try again later.</p>`;
-      }
+    // Load all sections
+    loadAllProducts();
+    loadRecentlyViewed();
+    loadPopularProducts();
+    loadSearchResults();
+  } catch (error) {
+    console.error('Error fetching products:', error.message);
+    products = [];
+    if (productContainer) {
+      productContainer.innerHTML = `<p>Failed to load products: ${error.message}. Please try again later.</p>`;
     }
   }
-
+}
   // Update Menu List
   function updateMenuList() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
