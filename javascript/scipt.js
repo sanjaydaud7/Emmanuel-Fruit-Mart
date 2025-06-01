@@ -8,64 +8,65 @@ document.addEventListener("DOMContentLoaded", async function () {
   const searchQuerySpan = document.getElementById("searchQuery");
   const noResults = document.getElementById("noResults");
 
-  
-
   let products = [];
 
-  // Fetch Products from Google Sheets
-// script.js
-async function fetchProducts() {
-  try {
-    console.log('Fetching products from MongoDB...');
-    const response = await fetch('http://localhost:5000/api/products', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  // Fetch Products from MongoDB
+  async function fetchProducts() {
+    try {
+      console.log('Fetching products from MongoDB...');
+      const response = await fetch('https://testing-ecommerce-3fbd.onrender.com/api/products', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
-    }
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+      }
 
-    const productsData = await response.json();
-    console.log('Fetched products from MongoDB:', productsData);
+      const productsData = await response.json();
+      console.log('Fetched products from MongoDB:', productsData);
 
-    // Map data to ensure correct format
-    products = productsData.map(product => ({
-      id: product.id,
-      name: product.name || 'Unknown Product',
-      price: product.price || 'N/A',
-      image: product.image || 'https://via.placeholder.com/150',
-      category: product.category || 'Unknown',
-      description: product.description || '',
-      nutrients: Array.isArray(product.nutrients) ? product.nutrients : [],
-      calories: product.calories || 'N/A',
-      healthBenefits: product.healthBenefits || '',
-      tags: Array.isArray(product.tags) ? product.tags : [],
-    }));
+      // Map data to ensure correct format
+      products = productsData.map(product => ({
+        id: product.id,
+        name: product.name || 'Unknown Product',
+        price: product.price || 'N/A',
+        image: product.image || 'https://via.placeholder.com/150',
+        category: product.category || 'Unknown',
+        description: product.description || '',
+        nutrients: Array.isArray(product.nutrients) ? product.nutrients : [],
+        calories: product.calories || 'N/A',
+        healthBenefits: product.healthBenefits || '',
+        tags: Array.isArray(product.tags) ? product.tags : [],
+      }));
 
-    console.log('Processed products:', products);
+      console.log('Processed products:', products);
 
-    // Verify DOM elements
-    if (!productContainer) console.error('productContainer not found in DOM');
-    if (!recentlyViewedContainer) console.error('recentlyViewedContainer not found in DOM');
-    if (!popularProductsContainer) console.error('popularProductsContainer not found in DOM');
-    if (!relatedProductsContainer) console.error('relatedProductsContainer not found in DOM');
+      // Verify DOM elements
+      if (!productContainer) console.error('productContainer not found in DOM');
+      if (!recentlyViewedContainer) console.error('recentlyViewedContainer not found in DOM');
+      if (!popularProductsContainer) console.error('popularProductsContainer not found in DOM');
+      if (!relatedProductsContainer) console.error('relatedProductsContainer not found in DOM');
+      if (!searchResultsContainer) console.error('searchResultsContainer not found in DOM');
+      if (!searchQuerySpan) console.error('searchQuerySpan not found in DOM');
+      if (!noResults) console.error('noResults not found in DOM');
 
-    // Load all sections
-    loadAllProducts();
-    loadRecentlyViewed();
-    loadPopularProducts();
-    loadSearchResults();
-  } catch (error) {
-    console.error('Error fetching products:', error.message);
-    products = [];
-    if (productContainer) {
-      productContainer.innerHTML = `<p>Failed to load products: ${error.message}. Please try again later.</p>`;
+      // Load all sections
+      loadAllProducts();
+      loadRecentlyViewed();
+      loadPopularProducts();
+      loadSearchResults();
+    } catch (error) {
+      console.error('Error fetching products:', error.message);
+      products = [];
+      if (productContainer) {
+        productContainer.innerHTML = `<p>Failed to load products: ${error.message}. Please try again later.</p>`;
+      }
     }
   }
-}
+
   // Update Menu List
   function updateMenuList() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -248,115 +249,112 @@ async function fetchProducts() {
     }
   }
 
-  // Search Functionality
-// ...existing code...
-
-// Utility: Simple similarity function (Levenshtein Distance)
-function getLevenshteinDistance(a, b) {
-  if (!a.length) return b.length;
-  if (!b.length) return a.length;
-  const matrix = [];
-  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-  for (let i = 1; i <= b.length; i++) {
-    for (let j = 1; j <= a.length; j++) {
-      if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
-      } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1, // substitution
-          matrix[i][j - 1] + 1,     // insertion
-          matrix[i - 1][j] + 1      // deletion
-        );
+  // Utility: Simple similarity function (Levenshtein Distance)
+  function getLevenshteinDistance(a, b) {
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, // substitution
+            matrix[i][j - 1] + 1,     // insertion
+            matrix[i - 1][j] + 1      // deletion
+          );
+        }
       }
     }
+    return matrix[b.length][a.length];
   }
-  return matrix[b.length][a.length];
-}
 
-// Utility: Check if two words are similar enough
-function isSimilar(str1, str2) {
-  str1 = str1.toLowerCase();
-  str2 = str2.toLowerCase();
-  if (str1 === str2) return true;
-  // Allow up to 2 edits for short words, 3 for longer
-  const maxDistance = str1.length > 6 ? 3 : 2;
-  return getLevenshteinDistance(str1, str2) <= maxDistance;
-}
+  // Utility: Check if two words are similar enough
+  function isSimilar(str1, str2) {
+    str1 = str1.toLowerCase();
+    str2 = str2.toLowerCase();
+    if (str1 === str2) return true;
+    // Allow up to 2 edits for short words, 3 for longer
+    const maxDistance = str1.length > 6 ? 3 : 2;
+    return getLevenshteinDistance(str1, str2) <= maxDistance;
+  }
 
-// Enhanced Search Functionality
-function loadSearchResults() {
-  if (searchResultsContainer && searchQuerySpan && noResults) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get("q")?.trim().toLowerCase() || "";
-    searchQuerySpan.textContent = query || "All Products";
+  // Enhanced Search Functionality
+  function loadSearchResults() {
+    if (searchResultsContainer && searchQuerySpan && noResults) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get("q")?.trim().toLowerCase() || "";
+      searchQuerySpan.textContent = query || "All Products";
 
-    if (!query) {
-      searchResultsContainer.innerHTML = "";
-      products.forEach(product => {
-        const productDiv = createProductElement(product);
-        searchResultsContainer.appendChild(productDiv);
-      });
-      noResults.style.display = "none";
-      return;
-    }
-
-    // Main filter: direct match or similar
-    const filteredProducts = products.filter(product => {
-      // Check name, category, description, nutrients, healthBenefits, tags
-      const fields = [
-        product.name,
-        product.category,
-        product.description,
-        ...(Array.isArray(product.nutrients) ? product.nutrients : (product.nutrients || "").split(";")),
-        product.healthBenefits,
-        ...(Array.isArray(product.tags) ? product.tags : (product.tags || "").split(";"))
-      ];
-      return fields.some(field => {
-        if (!field) return false;
-        // Direct match
-        if (field.toLowerCase().includes(query)) return true;
-        // Similarity check for each word in field
-        return field
-          .toLowerCase()
-          .split(/[\s,;]+/)
-          .some(word => isSimilar(word, query));
-      });
-    });
-
-    searchResultsContainer.innerHTML = "";
-    if (filteredProducts.length > 0) {
-      filteredProducts.forEach(product => {
-        const productDiv = createProductElement(product);
-        searchResultsContainer.appendChild(productDiv);
-      });
-      noResults.style.display = "none";
-    } else {
-      // Show preview: closest matches (top 3 by similarity)
-      // Compute similarity score for each product name
-      const scored = products.map(product => {
-        const name = product.name.toLowerCase();
-        const dist = getLevenshteinDistance(name, query);
-        return { product, dist };
-      });
-      scored.sort((a, b) => a.dist - b.dist);
-      const preview = scored.slice(0, 3).map(s => s.product);
-
-      noResults.style.display = "block";
-      if (preview.length > 0) {
-        const previewDiv = document.createElement("div");
-        previewDiv.innerHTML = "<div style='margin:10px 0 5px 0;font-weight:bold;'>Did you mean:</div>";
-        preview.forEach(product => {
+      if (!query) {
+        searchResultsContainer.innerHTML = "";
+        products.forEach(product => {
           const productDiv = createProductElement(product);
-          previewDiv.appendChild(productDiv);
+          searchResultsContainer.appendChild(productDiv);
         });
-        searchResultsContainer.appendChild(previewDiv);
+        noResults.style.display = "none";
+        return;
       }
+
+      // Main filter: direct match or similar
+      const filteredProducts = products.filter(product => {
+        // Check name, category, description, nutrients, healthBenefits, tags
+        const fields = [
+          product.name,
+          product.category,
+          product.description,
+          ...(Array.isArray(product.nutrients) ? product.nutrients : (product.nutrients || "").split(";")),
+          product.healthBenefits,
+          ...(Array.isArray(product.tags) ? product.tags : (product.tags || "").split(";"))
+        ];
+        return fields.some(field => {
+          if (!field) return false;
+          // Direct match
+          if (field.toLowerCase().includes(query)) return true;
+          // Similarity check for each word in field
+          return field
+            .toLowerCase()
+            .split(/[\s,;]+/)
+            .some(word => isSimilar(word, query));
+        });
+      });
+
+      searchResultsContainer.innerHTML = "";
+      if (filteredProducts.length > 0) {
+        filteredProducts.forEach(product => {
+          const productDiv = createProductElement(product);
+          searchResultsContainer.appendChild(productDiv);
+        });
+        noResults.style.display = "none";
+      } else {
+        // Show preview: closest matches (top 3 by similarity)
+        // Compute similarity score for each product name
+        const scored = products.map(product => {
+          const name = product.name.toLowerCase();
+          const dist = getLevenshteinDistance(name, query);
+          return { product, dist };
+        });
+        scored.sort((a, b) => a.dist - b.dist);
+        const preview = scored.slice(0, 3).map(s => s.product);
+
+        noResults.style.display = "block";
+        if (preview.length > 0) {
+          const previewDiv = document.createElement("div");
+          previewDiv.innerHTML = "<div style='margin:10px 0 5px 0;font-weight:bold;'>Did you mean:</div>";
+          preview.forEach(product => {
+            const productDiv = createProductElement(product);
+            previewDiv.appendChild(productDiv);
+          });
+          searchResultsContainer.appendChild(previewDiv);
+        }
+      }
+    } else {
+      console.error('Missing required DOM elements for search functionality');
     }
   }
-}
-
-// ...existing code...
 
   // Initialize
   updateMenuList();
