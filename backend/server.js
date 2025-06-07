@@ -1,10 +1,8 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require("cors");
 const bodyParser = require('body-parser');
-
 
 dotenv.config();
 
@@ -16,13 +14,13 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 // Routes
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products'); // Add product routes
+const orderRoutes = require('./routes/orders'); // Add order routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes); // Add product API endpoint
-
+app.use('/api/orders', orderRoutes); // Add orders API endpoint
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {

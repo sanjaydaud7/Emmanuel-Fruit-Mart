@@ -33,13 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (product) {
+    // Populate product details
     document.getElementById("product-image").src = product.image;
     document.getElementById("product-name").innerText = product.name;
     document.getElementById("product-description").innerText = product.description;
     document.getElementById("product-price").innerText = `${product.price}`;
-    document.getElementById("nutrient").innerText = product.nutrients.join(", ");
-    document.getElementById("calories").innerText = product.calories;
-    document.getElementById("health-benefits").innerText = product.healthBenefits;
+    document.getElementById("nutrient").innerText = product.nutrients ? product.nutrients.join(", ") : "N/A";
+    document.getElementById("calories").innerText = product.calories || "N/A";
+    document.getElementById("health-benefits").innerText = product.healthBenefits || "N/A";
 
     // Handle Add to Wishlist
     const addToWishlistBtn = document.getElementById("add-to-wishlist");
@@ -102,14 +103,21 @@ document.addEventListener("DOMContentLoaded", function () {
         name: product.name,
         price: parseFloat(product.price.replace(/[^\d.]/g, '')),
         image: product.image,
-        quantity: quantity
+        quantity: quantity,
+        description: product.description,
+        nutrients: product.nutrients,
+        calories: product.calories,
+        healthBenefits: product.healthBenefits
       };
 
-      localStorage.setItem("order", JSON.stringify(order));
+      localStorage.setItem("checkoutProduct", JSON.stringify(order));
+      localStorage.setItem("checkoutQuantity", quantity);
       showAlert(`Proceeding to checkout for ${quantity} ${product.name}(s).`, "success");
       setTimeout(() => {
         window.location.href = "checkout.html";
       }, 2000);
     });
+  } else {
+    showAlert("No product selected. Please choose a product.", "error");
   }
 });

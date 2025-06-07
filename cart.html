@@ -96,10 +96,12 @@
             </button>
         </div>
 
-        <script>
+  <script>
+// API URL for orders
+const API_URL = "http://localhost:5000/api/orders";
 
-        // function to save shipping address 
-        document.getElementById("saveAddressBtn").addEventListener("click", function () {
+// Function to save shipping address
+document.getElementById("saveAddressBtn").addEventListener("click", function () {
     const fullName = document.getElementById("fullName").value.trim();
     const addressLine1 = document.getElementById("addressLine1").value.trim();
     const addressLine2 = document.getElementById("addressLine2").value.trim();
@@ -121,6 +123,7 @@
         state,
         zipCode,
         phoneNumber,
+        country: "India" // Assuming country is fixed for consistency; adjust as needed
     };
 
     // Save the address to localStorage
@@ -165,13 +168,7 @@ document.getElementById("editAddressBtn").addEventListener("click", function () 
     }
 });
 
-// Load the saved address on page load
-window.onload = function () {
-    displaySavedAddress();
-};        
-
-
-// function to load from local storage 
+// Function to load cart from localStorage
 function loadCart() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -198,36 +195,15 @@ function loadCart() {
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     updateCart(cart, total);
 }
-        function handlePayment() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        if (cart.length === 0) {
-            alert("Your cart is empty.");
-            return;
-        }
 
-        const total = document.getElementById('cartTotal').textContent;
-        alert(`Thank you for your purchase! You've been charged ₹${total}.`);
-
-        // Clear the cart
-        localStorage.removeItem('cart');
-        loadCart(); // Refresh UI
-    }
-        function removeFromCart(index) {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.splice(index, 1); // Remove item at given index
-    localStorage.setItem('cart', JSON.stringify(cart)); // Update storage
-    loadCart(); // Reload cart and UI
-}
-
-    
-        function updateCart(cart, total) {
+function updateCart(cart, total) {
     const cartItems = document.getElementById('cartItems');
     cartItems.innerHTML = '';
 
     cart.forEach((item, index) => {
         const li = document.createElement('li');
         li.innerHTML = `
-            ${item.name} - ₹${item.price * item.quantity.toFixed(2)} 
+            ${item.name} - ₹${(item.price * item.quantity).toFixed(2)} 
             <button style="margin-left: 10px; background: none; border: none; color: red; cursor: pointer;" onclick="removeFromCart(${index})">
                 ❌
             </button>
@@ -236,13 +212,104 @@ function loadCart() {
     });
 
     document.getElementById('cartTotal').textContent = total.toFixed(2);
-
-
 }
 
-    
-        window.onload = loadCart;
-    </script>
+function removeFromCart(index) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.splice(index, 1); // Remove item at given index
+    localStorage.setItem('cart', JSON.stringify(cart)); // Update storage
+    loadCart(); // Reload cart and UI
+}
 
+async function handlePayment() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const address = JSON.parse(localStorage.getItem('shippingAddress'));
+
+    // Validate cart and address
+    if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+
+    if (!address || !address.fullName || !address.addressLine1 || !address.city || !address.state || !address.zipCode || !address.phoneNumber) {
+        alert("Please provide a valid shipping address.");
+        return;
+    }
+
+    // Get user info
+    const user = JSON.parse(localStorage.getItem("loggedInUser"))?.email || "anonymous";
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token || "";
+
+    let allOrdersSuccessful = true;
+
+    // Send each cart item as a separate order
+    for (const item of cart) {
+        const orderData = {
+            user,
+            product: {
+                name: item.name,
+                price: parseFloat(item.price),
+                description: item.description || "",
+                image: item.image || "",
+                nutrient: item.nutrient || "",
+                calories: item.calories || "",
+                healthBenefits: item.healthBenefits || ""
+            },
+            quantity: parseInt(item.quantity),
+            totalPrice: parseFloat((item.price * item.quantity).toFixed(2)),
+            address: {
+                fullName: address.fullName,
+                addressLine1: address.addressLine1,
+                addressLine2: address.addressLine2 || "",
+                city: address.city,
+                state: address.state,
+                zipCode: address.zipCode,
+                country: address.country || "India" // Default country if not provided
+            }
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/create`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || data.status !== "success") {
+                allOrdersSuccessful = false;
+                console.error(`Failed to place order for ${item.name}: ${data.message || "Unknown error"}`);
+            }
+        } catch (error) {
+            allOrdersSuccessful = false;
+            console.error(`Error placing order for ${item.name}:`, error);
+        }
+    }
+
+    // Provide feedback to the user
+    if (allOrdersSuccessful) {
+        alert(`Thank you for your purchase! You've been charged ₹${document.getElementById('cartTotal').textContent}.`);
+        // Clear cart and address
+        localStorage.removeItem('cart');
+        localStorage.removeItem('shippingAddress');
+        // Refresh UI
+        loadCart();
+        document.getElementById("savedAddressContainer").style.display = "none";
+        document.getElementById("shippingForm").reset();
+    } else {
+        alert("Some orders could not be processed. Please try again.");
+    }
+}
+
+// Load cart and saved address on page load
+window.onload = function () {
+    loadCart();
+    displaySavedAddress();
+};
+</script>
     </body>
 </html>

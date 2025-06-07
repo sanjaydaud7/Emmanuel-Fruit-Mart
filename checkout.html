@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <link rel="stylesheet" href="./css/tab.css">
+    <style>
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        margin: 0;
+        padding: 40px 20px;
+        background-color: #f7f9fc;
+        line-height: 1.6;
+      }
+      .checkout-container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease-in-out;
+      }
+      .checkout-container:hover {
+        transform: translateY(-2px);
+      }
+      .product-details, .address-form {
+        margin-bottom: 30px;
+      }
+      .product-details h2, .address-form h2 {
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+        color: #1a1a1a;
+        font-weight: 600;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 10px;
+      }
+      .product-details p {
+        margin: 10px 0;
+        font-size: 1.1rem;
+        color: #333;
+      }
+      .product-details p strong {
+        color: #1a1a1a;
+        font-weight: 500;
+      }
+      .address-form label {
+        display: block;
+        margin: 12px 0 6px;
+        font-size: 1rem;
+        color: #2c3e50;
+        font-weight: 500;
+      }
+      .address-form input, .address-form textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #d1d8e0;
+        border-radius: 6px;
+        font-size: 1rem;
+        background-color: #f9fafb;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      .address-form input:focus, .address-form textarea:focus {
+        outline: none;
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+      }
+      .address-form input:required:invalid:not(:focus) {
+        border-color: #e63946;
+      }
+      .pay-now-btn {
+        background: linear-gradient(135deg, #6c63ff 0%, #4834d4 100%);
+        color: #ffffff;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: background 0.3s ease, transform 0.2s ease;
+        display: block;
+        margin: 20px auto 0;
+      }
+      .pay-now-btn:hover {
+        background: linear-gradient(135deg, #4834d4 0%, #3b2aa8 100%);
+        transform: translateY(-2px);
+      }
+      .pay-now-btn:active {
+        transform: translateY(0);
+      }
+      .alert-message {
+        margin-top: 20px;
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 1rem;
+        color: #ffffff;
+        opacity: 0;
+        animation: fadeIn 0.3s ease forwards;
+      }
+      .alert-message.success {
+        background-color: #51cf66;
+      }
+      .alert-message.error {
+        background-color: #e63946;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @media (max-width: 600px) {
+        .checkout-container {
+          padding: 20px;
+        }
+        .product-details h2, .address-form h2 {
+          font-size: 1.5rem;
+        }
+        .pay-now-btn {
+          padding: 12px 20px;
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="checkout-container">
+      <div class="product-details">
+        <h2>Order Summary</h2>
+        <p><strong>Product:</strong> <span id="product-name"></span></p>
+        <p><strong>Price:</strong> <span id="product-price"></span></p>
+        <p><strong>Quantity:</strong> <span id="quantity"></span></p>
+        <p><strong>Total:</strong> <span id="total-price"></span></p>
+      </div>
+      <div class="address-form">
+        <h2>Shipping Address</h2>
+        <form id="addressForm">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" required />
+          <label for="addressLine1">Address Line 1</label>
+          <input type="text" id="addressLine1" required />
+          <label for="addressLine2">Address Line 2 (Optional)</label>
+          <input type="text" id="addressLine2" />
+          <label for="city">City</label>
+          <input type="text" id="city" required />
+          <label for="state">State</label>
+          <input type="text" id="state" required />
+          <label for="zipCode">ZIP Code</label>
+          <input type="text" id="zipCode" required />
+          <label for="country">Country</label>
+          <input type="text" id="country" required />
+          <button type="submit" class="pay-now-btn">Pay Now</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const API_URL = "http://localhost:5000/api/orders";
+
+        // Retrieve product details from localStorage or URL parameters
+        const productDetails = JSON.parse(localStorage.getItem("checkoutProduct")) || {};
+        const quantity = localStorage.getItem("checkoutQuantity") || 1;
+        const totalPrice = (parseFloat(productDetails.price) * parseInt(quantity)).toFixed(2);
+
+        // Display product details
+        document.getElementById("product-name").textContent = productDetails.name || "N/A";
+        document.getElementById("product-price").textContent = `$${productDetails.price || "0.00"}`;
+        document.getElementById("quantity").textContent = quantity;
+        document.getElementById("total-price").textContent = `$${totalPrice}`;
+
+        function showAlert(message, type = "success") {
+          const form = document.getElementById("addressForm");
+          const existingAlert = form.querySelector(".alert-message");
+          if (existingAlert) existingAlert.remove();
+
+          const alertDiv = document.createElement("div");
+          alertDiv.className = `alert-message ${type}`;
+          alertDiv.textContent = message;
+          form.appendChild(alertDiv);
+          setTimeout(() => alertDiv.remove(), 3000);
+        }
+
+        // Handle form submission
+        document.getElementById("addressForm").addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const address = {
+            fullName: document.getElementById("fullName").value.trim(),
+            addressLine1: document.getElementById("addressLine1").value.trim(),
+            addressLine2: document.getElementById("addressLine2").value.trim(),
+            city: document.getElementById("city").value.trim(),
+            state: document.getElementById("state").value.trim(),
+            zipCode: document.getElementById("zipCode").value.trim(),
+            country: document.getElementById("country").value.trim(),
+          };
+
+          // Basic validation
+          if (!address.fullName || !address.addressLine1 || !address.city || !address.state || !address.zipCode || !address.country) {
+            showAlert("Please fill all required fields.", "error");
+            return;
+          }
+
+          const orderData = {
+            user: JSON.parse(localStorage.getItem("loggedInUser"))?.email || "anonymous",
+            product: {
+              name: productDetails.name || "",
+              price: parseFloat(productDetails.price) || 0,
+              description: productDetails.description || "",
+              image: productDetails.image || "",
+              nutrient: productDetails.nutrient || "",
+              calories: productDetails.calories || "",
+              healthBenefits: productDetails.healthBenefits || "",
+            },
+            quantity: parseInt(quantity),
+            totalPrice: parseFloat(totalPrice),
+            phone: phoneInput.value, 
+            address,
+          };
+
+          try {
+            const response = await fetch(`${API_URL}/create`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${JSON.parse(localStorage.getItem("loggedInUser"))?.token || ""}`,
+              },
+              body: JSON.stringify(orderData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.status === "success") {
+              showAlert("Thank you for your purchase!", "success");
+              setTimeout(() => {
+                localStorage.removeItem("checkoutProduct");
+                localStorage.removeItem("checkoutQuantity");
+                window.location.href = "../home.html";
+              }, 2000);
+            } else {
+              showAlert(data.message || "Failed to place order. Please try again.", "error");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            showAlert("Network error or server unreachable. Please try again later.", "error");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
