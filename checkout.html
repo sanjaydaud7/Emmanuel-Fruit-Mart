@@ -152,6 +152,8 @@
           <input type="text" id="zipCode" required />
           <label for="country">Country</label>
           <input type="text" id="country" required />
+           <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required pattern="[0-9+\-\s()]{7,}" />
           <button type="submit" class="pay-now-btn">Pay Now</button>
         </form>
       </div>
@@ -195,6 +197,7 @@
             state: document.getElementById("state").value.trim(),
             zipCode: document.getElementById("zipCode").value.trim(),
             country: document.getElementById("country").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
           };
 
           // Basic validation
@@ -218,6 +221,21 @@
             totalPrice: parseFloat(totalPrice),
             address,
           };
+
+// Basic validation
+if (
+  !address.fullName ||
+  !address.addressLine1 ||
+  !address.city ||
+  !address.state ||
+  !address.zipCode ||
+  !address.country ||
+  !address.phone
+) {
+  showAlert("Please fill all required fields.", "error");
+  return;
+}
+
 
           try {
             const response = await fetch(`${API_URL}/create`, {

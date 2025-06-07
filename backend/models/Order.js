@@ -24,15 +24,18 @@ const orderSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-  address: {
-    fullName: { type: String, required: true },
-    addressLine1: { type: String, required: true },
-    addressLine2: { type: String },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    zipCode: { type: String, required: true },
-    country: { type: String, required: true },
-  },
+// ...existing code...
+address: {
+  fullName: { type: String, required: true },
+  addressLine1: { type: String, required: true },
+  addressLine2: { type: String },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  zipCode: { type: String, required: true },
+  country: { type: String, required: true },
+  phone: { type: String, required: true }, // <-- Add this line
+},
+// ...existing code...
   status: {
     type: String,
     default: 'pending',

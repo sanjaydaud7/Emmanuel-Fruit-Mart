@@ -32,7 +32,7 @@ router.post('/create', async (req, res) => {
     await order.save();
 
     // Log success message with address details to terminal
-    console.log(`Order successfully created! Order ID: ${order._id}, User: ${user}, Product: ${product.name}, Quantity: ${quantity}, Total Price: $${totalPrice}, Address: ${address.fullName}, ${address.addressLine1}, ${address.addressLine2 ? address.addressLine2 + ', ' : ''}${address.city}, ${address.state}, ${address.zipCode}, ${address.country}`);
+    console.log(`Order successfully created! Order ID: ${order._id}, User: ${user}, Product: ${product.name}, Quantity: ${quantity}, Total Price: $${totalPrice}, Address: ${address.fullName}, ${address.addressLine1}, ${address.addressLine2 ? address.addressLine2 + ', ' : ''}${address.city}, ${address.state}, ${address.zipCode}, ${address.country}, Phone: ${address.phone}`);
 
     res.status(201).json({ 
       status: 'success', 
